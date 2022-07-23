@@ -1,6 +1,6 @@
 # Better Idåsen Web
 
-A web app created to be able to control the [IKEA idåsen](https://www.ikea.com/se/sv/p/idasen-skrivbord-brun-beige-s39281018/) through a web browser using bluetooth.
+A web app created to be able to control the [IKEA idåsen](https://www.ikea.com/se/sv/p/idasen-skrivbord-brun-beige-s39281018/) desk through a web browser using bluetooth.
 
 ## TODO
 
