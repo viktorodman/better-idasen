@@ -5,7 +5,7 @@ import { Desk } from './models/Desk';
 import { TableIds } from './enums/TableIds';
 
 const requestOptions: RequestDeviceOptions = {
-  optionalServices: [TableIds.POSITION_SERVICE_ID, TableIds.POSITION_SERVICE_ID],
+  optionalServices: [TableIds.PRIMARY_SERVICE_ID, TableIds.POSITION_SERVICE_ID],
   acceptAllDevices: true
 }
 
@@ -17,6 +17,7 @@ const App = () => {
       await navigator.bluetooth.requestDevice(requestOptions)
         .catch((error: any) => { console.log(error.message) });
 
+    console.log(bluetoothDevice)
     if (bluetoothDevice) setDesk(new Desk(bluetoothDevice))
   }
 

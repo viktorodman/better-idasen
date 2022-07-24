@@ -4,11 +4,11 @@ A web app created to be able to control the [IKEA idåsen](https://www.ikea.com/
 
 ## TODO
 
-- Fix getting current table position when conneting to the desk.
+- Change current pos to be set as a react state and listen for bluetooth events from table. 
 
 ## Useful links / inspiration
 
-https://github.com/newAM/idasen
-https://github.com/rhyst/idasen-controller
-https://github.com/nconrad/idasen-desk-controller
+- https://github.com/newAM/idasen
+- https://github.com/rhyst/idasen-controller
+- https://github.com/nconrad/idasen-desk-controller
 
