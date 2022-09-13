@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from 'react';
 /* import logo from './logo.svg'; */
 import './App.css';
-import { Desk } from './models/Desk';
+/* import { Desk } from './models/Desk'; */
 import { TableIds } from './enums/TableIds';
+import BlePair from './components/BlePair';
+import Desk from './components/Desk';
 
 const requestOptions: RequestDeviceOptions = {
   optionalServices: [TableIds.PRIMARY_SERVICE_ID, TableIds.POSITION_SERVICE_ID],
@@ -10,34 +12,28 @@ const requestOptions: RequestDeviceOptions = {
 }
 
 const App = () => {
-  const [desk, setDesk] = useState<Desk | null>(null)
+  const [pairedDesk, setPairedDesk] = useState<BluetoothDevice | null>(null);
+  const [errorMessage, setErrorMessage] = useState("");
 
-  const findDevice = async () => {
-    const bluetoothDevice =
-      await navigator.bluetooth.requestDevice(requestOptions)
-        .catch((error: any) => { console.log(error.message) });
-
-    console.log(bluetoothDevice)
-    if (bluetoothDevice) setDesk(new Desk(bluetoothDevice))
+  const handleConnectError = (errorMessage: string) => {
+    console.log("Disconnect desk")
+    setPairedDesk(null);
   }
 
+  console.log('Render app')
   return (
     <div className="App">
       <header className="App-header">
-        <h1>BETTER IDÅSEN</h1>
-        <button onClick={async () => { await findDevice() }} >Find Device</button>
-        <h1>Found device: {desk?.name ?? "No device connected"}</h1>
-        <p>Current Pos: {desk?.currentPos ?? "No pos set"}</p>
-        {desk !== null ?
-          (
-            <div>
-              <button onClick={async () => await desk.connect()} >Connect</button>
-              <button onClick={async () => await desk.moveUp()}>Up</button>
-              <button onClick={async () => await desk.moveDown()}>Down</button>
-              <button onClick={async () => await desk.stop()}>Stop</button>
-            </div>
-          ) : null
+        {
+          pairedDesk ? <Desk onConnectError={handleConnectError} pairedDesk={pairedDesk} /> : null
         }
+
+        <BlePair
+          onPair={setPairedDesk}
+          onError={setErrorMessage}
+          buttonText="Pair Desk"
+          bleRequestDeviceOptions={requestOptions}
+        />
       </header>
     </div>
   );
