@@ -4,38 +4,38 @@ import { TableIds } from '../enums/TableIds';
 import DeskControlls from './DeskControlls';
 
 type Props = {
-  pairedDesk: BluetoothDevice,
+  pairedDesk: BluetoothRemoteGATTServer,
   onConnectError: (errorMessage: string) => void
 }
 
 const Desk = (props: Props) => {
   const [position, setPosition] = useState<number>(0);
   const [primaryService, setPrimaryService] = useState<BluetoothRemoteGATTService | null>(null);
-  const [gattServer, setGattServer] = useState<BluetoothRemoteGATTServer | null>(null);
   const [posCharacteristic, setPosCharacteristic] = useState<BluetoothRemoteGATTCharacteristic | null>(null);
 
 
-  const connectToTable = useCallback(
+  const initianlize = useCallback(
     async () => {
-      const gattServer = await props.pairedDesk.gatt?.connect();
-      const primaryService = await gattServer?.getPrimaryService(
+      const primaryService = await props.pairedDesk.getPrimaryService(
         TableIds.PRIMARY_SERVICE_ID
       );
 
-      if (!gattServer || !primaryService) {
-        props.onConnectError("Could not connect to desk")
-        return;
-      }
+      if (primaryService) return setPrimaryService(primaryService);
 
-      const deskPosCharacteristic = await getDeskPosCharacteristic(gattServer)
-
-      await setUpPositionNotifications(deskPosCharacteristic);
-      await setStartPosition(deskPosCharacteristic);
-      setGattServer(gattServer);
-      setPrimaryService(primaryService);
+      props.onConnectError("Could not connect to desk")
     },
     []
   );
+
+  const setUpDeskPosition = useCallback(
+    async () => {
+      const deskPosCharacteristic = await getDeskPosCharacteristic(props.pairedDesk)
+
+      await setUpPositionNotifications(deskPosCharacteristic);
+      await setStartPosition(deskPosCharacteristic);
+    },
+    []
+  )
 
   const getDeskPosCharacteristic = async (gattServer: BluetoothRemoteGATTServer) => {
     const deskPosPrimaryService = await gattServer?.getPrimaryService(
@@ -76,9 +76,8 @@ const Desk = (props: Props) => {
       if (posCharacteristic) {
         await posCharacteristic.stopNotifications();
         posCharacteristic.removeEventListener('characteristicvaluechanged', handlePositionChange);
-        gattServer?.disconnect();
+        props.pairedDesk.disconnect();
         setPrimaryService(null);
-        setGattServer(null);
         setPosCharacteristic(null);
         setPosition(0);
       }
@@ -87,20 +86,18 @@ const Desk = (props: Props) => {
   )
 
   useEffect(() => {
-    connectToTable();
-
+    initianlize();
+    setUpDeskPosition();
     return () => {
       disconnectFromTable()
     }
-  }, [connectToTable, disconnectFromTable]);
+  }, [initianlize, setUpDeskPosition, disconnectFromTable]);
   console.log('Render Desk')
   return (
     <div>
-      {/* <Paper variant='outlined'> */}
       <h2>Desk</h2>
       <Typography>Current Pos: {position}</Typography>
       {primaryService != null ? <DeskControlls service={primaryService} /> : null}
-      {/* </Paper> */}
     </div>
   )
 }

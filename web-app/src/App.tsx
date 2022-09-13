@@ -5,6 +5,7 @@ import './App.css';
 import { TableIds } from './enums/TableIds';
 import BlePair from './components/BlePair';
 import Desk from './components/Desk';
+import BleDisconnect from './components/BleDisconnect';
 
 const requestOptions: RequestDeviceOptions = {
   optionalServices: [TableIds.PRIMARY_SERVICE_ID, TableIds.POSITION_SERVICE_ID],
@@ -12,11 +13,16 @@ const requestOptions: RequestDeviceOptions = {
 }
 
 const App = () => {
-  const [pairedDesk, setPairedDesk] = useState<BluetoothDevice | null>(null);
+  const [pairedDesk, setPairedDesk] = useState<BluetoothRemoteGATTServer | null>(null);
   const [errorMessage, setErrorMessage] = useState("");
 
   const handleConnectError = (errorMessage: string) => {
     console.log("Disconnect desk")
+    setPairedDesk(null);
+  }
+
+  const handleDisconnect = () => {
+    pairedDesk?.disconnect()
     setPairedDesk(null);
   }
 
@@ -28,12 +34,18 @@ const App = () => {
           pairedDesk ? <Desk onConnectError={handleConnectError} pairedDesk={pairedDesk} /> : null
         }
 
-        <BlePair
-          onPair={setPairedDesk}
-          onError={setErrorMessage}
-          buttonText="Pair Desk"
-          bleRequestDeviceOptions={requestOptions}
-        />
+        {
+          pairedDesk === null ?
+            <BlePair
+              onPair={setPairedDesk}
+              onError={setErrorMessage}
+              buttonText="Pair Desk"
+              bleRequestDeviceOptions={requestOptions}
+            /> :
+            <BleDisconnect onDisconnect={handleDisconnect} />
+        }
+
+        {/* <button onClick={handleDisconnect}>disconnect</button> */}
       </header>
     </div>
   );

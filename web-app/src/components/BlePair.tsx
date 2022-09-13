@@ -4,7 +4,7 @@ import React, { useState } from 'react'
 import { TableIds } from '../enums/TableIds';
 
 type Props = {
-    onPair: (bleDevice: BluetoothDevice) => void,
+    onPair: (bleDevice: BluetoothRemoteGATTServer) => void,
     onError: (message: string) => void,
     bleRequestDeviceOptions: RequestDeviceOptions
     buttonText?: string,
@@ -21,8 +21,20 @@ const BlePair = (props: Props) => {
                 (error: Error) => { props.onError(error.message) }
             );
 
+        /* const gattServer = await pairedDevice. */
+
         console.log(pairedDevice);
-        if (pairedDevice) props.onPair(pairedDevice);
+        if (pairedDevice) {
+            const gattServer = await pairedDevice.gatt?.connect()
+
+            if (gattServer) {
+                props.onPair(gattServer);
+                return;
+            }
+        }
+
+        props.onError("Cant connect to device")
+        /* if (pairedDevice) props.onPair(pairedDevice); */
     }
 
     return (

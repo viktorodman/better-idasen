@@ -36,16 +36,6 @@ const DeskControlls = (props: Props) => {
             <Button sx={{ color: 'white' }} startIcon={<ArrowUpwardOutlined />} onClick={handleButtonUpPress}>Up</Button>
             <Button sx={{ color: 'white' }} startIcon={<ArrowDownwardOutlined />} onClick={handleButtonDownPress}>Down</Button>
             <Button sx={{ color: 'white' }} startIcon={<Stop />} onClick={handleButtonStopPress}>Stop</Button>
-            {/* <IconButton>
-                    <ArrowUpwardOutlined />
-                </IconButton>
-                <IconButton>
-                    <ArrowDownwardOutlined />
-                </IconButton>
-                <IconButton>
-                    <Stop />
-                </IconButton> */}
-
         </ButtonGroup>
     )
 }
