@@ -1,6 +1,6 @@
 import React from 'react'
 import DeviceToggle from '../../../features/device-toggle/DeviceToggle'
-
+import Desk from '../../../features/desk/Desk'
 type CenterContentProps = {}
 
 const CenterContent = ({}: CenterContentProps) => {

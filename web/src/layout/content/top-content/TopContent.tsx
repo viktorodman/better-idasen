@@ -21,9 +21,9 @@ const TopContent = ({}: TopContentProps) => {
             </span>
           </div>
         </div>
-        <div className='grow flex justify-end'>
+        {/* <div className='grow flex justify-end'>
           <DeviceSelector />
-        </div>
+        </div> */}
       </div>
     </div>
   )

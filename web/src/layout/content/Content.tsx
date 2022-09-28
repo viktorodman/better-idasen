@@ -6,15 +6,15 @@ import DeviceToggle from '../../features/device-toggle/DeviceToggle'
 import BottomContent from './bottom-content/BottomContent'
 import CenterContent from './center-content/CenterContent'
 import TopContent from './top-content/TopContent'
+import Desk from '../../features/desk/Desk'
+import Header from '../header/Header'
 
 type ContentProps = {}
 
 const Content = ({}: ContentProps) => {
   return (
-    <div className='min-h-screen bg-primary grow flex flex-col'>
-      <TopContent />
-      <CenterContent />
-      <BottomContent />
+    <div className='grow'>
+      <Desk />
     </div>
   )
 }
