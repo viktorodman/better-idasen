@@ -10,6 +10,7 @@ import { useAppSelector } from '../../app/hooks'
 import { selectDeskGattServer, selectIsConnected } from './deskSlice'
 import Connect from './connect/Connect'
 import Height from './height/Height'
+import ManualControls from './manual-controls/ManualControls'
 
 type DeskControllerProps = {}
 
@@ -24,6 +25,7 @@ const DeskController = ({}: DeskControllerProps) => {
     <div className='w-full h-full flex flex-col pt-6'>
       <UnitToggle />
       <Height />
+      <ManualControls />
       {/* <Info /> */}
 
       {/*   <div className='h-2/6 flex-none w-full h-full'>

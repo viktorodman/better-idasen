@@ -14,6 +14,7 @@ module.exports = {
         'dark-one': '#363c4f',
         'dark-two': '#4a5060',
         'mah-blue': '#5e7bb8',
+        'supa-grey': '#d4d4d4'
       }
     },
   },
